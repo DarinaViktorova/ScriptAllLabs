@@ -1,10 +1,8 @@
 const express = require("express");
 const MongoClient = require("mongodb").MongoClient;
 const objectId = require("mongodb").ObjectID;
-
 const app = express();
 const jsonParser = express.json();
-
 const mongoClient = new MongoClient("mongodb://localhost:27017/", { useUnifiedTopology: true });
 
 let dbClient;
@@ -53,7 +51,6 @@ app.post("/api/users", jsonParser, function (req, res) {
     const userCourse = req.body.course;
     const userSpeciality = req.body.speciality;
     const userAvg = req.body.avg;
-
     const userCity = req.body.city;
 
     const user = { name: userName, pantronimic: userPantronimic, last_name: userLastName, age: userAge, course: userCourse, speciality: userSpeciality, avg: userAvg, city: userCity };
