@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width" />
 
-    <title>Список студентів</title>
+    <title>Список аспірантів</title>
 
     <link
       rel="stylesheet"
@@ -34,8 +34,8 @@
       </div>
 
       <div class="form-group">
-        <label for="pantronimic">По батькові:</label>
-        <input class="form-control" name="pantronimic" />
+        <label for="pantronomic">По батькові:</label>
+        <input class="form-control" name="pantronomic" />
     </div>
 
       <div class="form-group">
@@ -77,11 +77,13 @@
           <tr>
             <th>Id</th>
             <th>Ім'я</th>
+            <th>По батькові</th>
             <th>Прізвище</th>
             <th>Вік</th>
             <th>Курс</th>
+            <th>Спеціальність</th>
             <th>Середній бал</th>
-            <th>Кафедра</th>
+            <th>Місто/село, область</th>
           </tr>
         </thead>
 
@@ -120,15 +122,17 @@
           const form = document.forms["userForm"];
           form.elements["id"].value = user._id;
           form.elements["name"].value = user.name;
+          form.elements["pantronomic"].value = user.pantronomic;
           form.elements["last_name"].value = user.last_name;
           form.elements["age"].value = user.age;
           form.elements["course"].value = user.course;
+          form.elements["speciality"].value = user.speciality;
           form.elements["avg"].value = user.avg;
-          form.elements["department"].value = user.department;
+          form.elements["city"].value = user.city;
         }
       }
       // Добавление пользователя
-      async function CreateUser(userName, last_name, userAge, course, avg, department) {
+      async function CreateUser(userName, pantronomic, last_name, userAge, course, speciality, avg, city) {
         const response = await fetch("api/users", {
           method: "POST",
           headers: {
@@ -137,11 +141,13 @@
           },
           body: JSON.stringify({
             name: userName,
+            pantronomic: pantronomic,
             last_name: last_name,
             age: parseInt(userAge, 10),
             course: parseInt(course, 10),
+            speciality: speciality,
             avg: parseFloat(avg, 10),
-            department:department
+            city: city
           }),
         });
         if (response.ok === true) {
@@ -151,7 +157,7 @@
         }
       } 
       // Изменение пользователя
-      async function EditUser(userName, last_name, userAge, course, avg, department) {
+      async function EditUser(userName, pantronomic, last_name, userAge, course, speciality, avg, city) {
         const response = await fetch("api/users", {
           method: "PUT",
           headers: {
@@ -161,11 +167,13 @@
           body: JSON.stringify({
             id: userId,
             name: userName,
+            pantronomic: pantronomic,
             last_name: last_name,
             age: parseInt(userAge, 10),
             course: parseInt(course, 4),
+            speciality: speciality,
             avg: parseFloat(avg, 12),
-            department:department
+            city: city
           }),
         });
         if (response.ok === true) {
@@ -198,27 +206,43 @@
         console.log(user);
         const tr = document.createElement("tr");
         tr.setAttribute("data-rowid", user._id);
+
         const idTd = document.createElement("td");
         idTd.append(user._id);
         tr.append(idTd);
+
         const nameTd = document.createElement("td");
         nameTd.append(user.name);
         tr.append(nameTd);
+
+        const pantronomicTd = document.createElement("td");
+        pantronomicTd.append(user.pantronomic);
+        tr.append(pantronomicTd);
+
         const lastnameTd = document.createElement("td");
         lastnameTd.append(user.last_name);
         tr.append(lastnameTd);
+
         const ageTd = document.createElement("td");
         ageTd.append(user.age);
         tr.append(ageTd);
+
         const courseTd = document.createElement("td");
         courseTd.append(user.course);
         tr.append(courseTd);
+
+        const specialityTd = document.createElement("td");
+        specialityTd.append(user.speciality);
+        tr.append(specialityTd);
+
         const avgTd = document.createElement("td");
         avgTd.append(user.avg);
         tr.append(avgTd);
-        const departmentTd = document.createElement("td");
-        departmentTd.append(user.department);
-        tr.append(departmentTd);
+
+        const cityTd = document.createElement("td");
+        cityTd.append(user.city);
+        tr.append(cityTd);
+
         const linksTd = document.createElement("td");
         const editLink = document.createElement("a");
         editLink.setAttribute("data-id", user._id);
@@ -250,14 +274,16 @@
         const form = document.forms["userForm"];
         const id = form.elements["id"].value;
         const name = form.elements["name"].value;
+        const pantronomic = form.elements["pantronomic"].value;
         const last_name = form.elements["last_name"].value;
         const age = form.elements["age"].value;
         const course = form.elements["course"].value;
+        const speciality = form.elements["speciality"].value;
         const avg = form.elements["avg"].value;
-        const department = form.elements["department"].value;
+        const city = form.elements["city"].value;
 
-        if (id == 0) CreateUser(name, last_name, age, course, avg, department);
-        else EditUser(id, name, last_name, age, course, avg, department);
+        if (id == 0) CreateUser(name, pantronomic, last_name, age, course, speciality, avg, city);
+        else EditUser(id, name, pantronomic, last_name, age, course, speciality, avg, city);
       }); // загрузка пользователей
       GetUsers();
     </script>
